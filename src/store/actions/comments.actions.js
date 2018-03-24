@@ -20,14 +20,23 @@ export default {
       Vue.toasted.error('You must login to vote')
       return
     }
-    commit('likeComment', { commentId: id, entityId, parentCommentId })
     return axios.post(`${BASE_URL}/comments/${id}/upvote`, {})
+      .then((response) => {
+        const comment = response.data.entity
+        // Tricky since it doesn't come back down with replies:
+        // We have to re-add them
+        const currentComment = state.comments[comment._id]
+        if (currentComment && currentComment.replies) {
+          comment.replies = currentComment.replies
+        }
+        commit('setComment', { entity: comment })
+        return response
+      })
   },
 
   removeComment: ({ commit, getters, state }, { id }) => {
     console.log('ID', id)
-    const token = getters.getToken
-    if (!token) {
+    if (!getters.isLoggedIn) {
       Vue.toasted.error('Login to delete your comment')
       return
     }

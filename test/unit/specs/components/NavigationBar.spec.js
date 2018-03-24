@@ -43,7 +43,9 @@ describe('NavigationBar.vue', (done) => {
       router
     })
 
-    wrapper.vm.$auth.logout = sinon.stub().returns(false)
+    wrapper.vm.$auth = {
+      logout: sinon.stub().returns(false)
+    }
     wrapper.vm.logoutHandler()
 
     expect(wrapper.vm.$auth.logout.calledOnce).to.equal(true)

@@ -11,6 +11,20 @@ export default {
     return axios.post(requestUrl, options)
   },
 
+  forumThreadLike: ({ commit, getters, state }, { id }) => {
+    if (!getters.isLoggedIn) {
+      Vue.toasted.error('You must login to vote')
+      return
+    }
+    // commit('likeComment', { commentId: id, entityId, parentCommentId })
+    return axios.post(`${BASE_URL}/forum/${id}/upvote`, {}).then((response) => {
+      const forumThread = response.data.entity
+      console.log('forumThread', forumThread)
+      commit('setForumThread', { entity: forumThread })
+      return response
+    })
+  },
+
   fetchForumThreads ({ getters, commit }) {
     const requestUrl = `${BASE_URL}/forum`
     return axios.get(requestUrl)
@@ -25,7 +39,7 @@ export default {
     return axios.get(`${BASE_URL}/forum/${id}`)
       .then((response) => {
         const forumThread = response.data
-        commit('setForumThreads', { list: [forumThread] })
+        commit('setForumThread', { entity: forumThread })
         return { forumThread }
       })
       .catch((error) => {

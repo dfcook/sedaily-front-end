@@ -15,9 +15,6 @@ import SocialSharing from 'vue-social-sharing'
 import VueAnalytics from 'vue-analytics'
 import Toasted from 'vue-toasted'
 
-import 'bootstrap'
-import './css/vendor.scss'
-
 // sync the router with the vuex store.
 // this registers `store.state.route`
 sync(store, router)
@@ -28,6 +25,9 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.use(Router)
+Vue.use(SocialSharing)
+Vue.use(infiniteScroll)
+Vue.config.productionTip = false
 
 Vue.use(Toasted, {
   position: 'bottom-center',
@@ -42,8 +42,6 @@ Vue.use(Toasted, {
 })
 
 Vue.use(AuthPlugin)
-Vue.use(SocialSharing)
-Vue.use(infiniteScroll)
 
 Vue.use(VeeValidate, {
   events: 'blur'
